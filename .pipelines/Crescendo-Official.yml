@@ -7,6 +7,20 @@ parameters:
     type: boolean
     default: false
 
+schedules:
+- cron: '0 3 * * 1'
+  displayName: Weekly Build
+  branches:
+    include:
+    - master
+  always: true
+
+parameters:
+  - name: 'publishToPowerShellGallery'
+    displayName: 'Publish module to PowerShell gallery'
+    type: boolean
+    default: false
+
 variables:
   BuildConfiguration: Release
   DOTNET_NOLOGO: true
@@ -75,7 +89,7 @@ extends:
             inputs:
               packageType: sdk
               useGlobalJson: true
-          - pwsh: ./build.ps1 -publish
+          - pwsh: ./build.ps1 -publish -BuildTestTool
             displayName: Build Crescendo
           - task: onebranch.pipeline.signing@1
             displayName: Sign 1st-party files
